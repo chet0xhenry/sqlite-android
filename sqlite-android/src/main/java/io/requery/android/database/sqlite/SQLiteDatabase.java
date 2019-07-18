@@ -85,6 +85,7 @@ public final class SQLiteDatabase extends SQLiteClosable implements SupportSQLit
 
     static {
         System.loadLibrary("sqlite3x");
+        //System.loadLibrary("sqlitefunctions");
     }
 
     private static final String TAG = "SQLiteDatabase";
@@ -196,6 +197,10 @@ public final class SQLiteDatabase extends SQLiteClosable implements SupportSQLit
      * Use the following when no conflict action is specified.
      */
     public static final int CONFLICT_NONE = 0;
+
+    //public void loadExtension() {
+    //    mConnectionPoolLocked
+    //}
 
     /** Conflict options integer enumeration definition */
     @IntDef({
@@ -1308,7 +1313,7 @@ public final class SQLiteDatabase extends SQLiteClosable implements SupportSQLit
      */
     @Override
     public Cursor query(String query) {
-        return rawQueryWithFactory(null, query, null, null, null);
+        return rawQueryWithFactory(null, query);
     }
 
     /**
@@ -1463,6 +1468,32 @@ public final class SQLiteDatabase extends SQLiteClosable implements SupportSQLit
                     cancellationSignal);
             return driver.query(cursorFactory != null ? cursorFactory : mCursorFactory,
                     selectionArgs);
+        } finally {
+            releaseReference();
+        }
+    }
+
+    public Cursor rawQueryWithFactory(
+            CursorFactory cursorFactory, String sql) {
+        acquireReference();
+        try {
+            SQLiteCursorDriver driver = new SQLiteDirectCursorDriver(this, sql, null,
+                    null);
+            return driver.query(cursorFactory != null ? cursorFactory : mCursorFactory,
+                    null);
+        } finally {
+            releaseReference();
+        }
+    }
+
+    public Cursor rawQueryWithFactory(
+            CursorFactory cursorFactory, String sql, long[] selectionArgs,
+            String editTable, CancellationSignal cancellationSignal) {
+        acquireReference();
+        try {
+            SQLiteDirectCursorDriver driver = new SQLiteDirectCursorDriver(this, sql, editTable,
+                    cancellationSignal);
+            return driver.query(cursorFactory != null ? cursorFactory : mCursorFactory, selectionArgs);
         } finally {
             releaseReference();
         }
@@ -2337,7 +2368,7 @@ public final class SQLiteDatabase extends SQLiteClosable implements SupportSQLit
             // has attached databases. query sqlite to get the list of attached databases.
             Cursor c = null;
             try {
-                c = rawQuery("pragma database_list;", null);
+                c = rawQuery("pragma database_list;");
                 while (c.moveToNext()) {
                     // sqlite returns a row for each database in the returned list of databases.
                     //   in each row,
