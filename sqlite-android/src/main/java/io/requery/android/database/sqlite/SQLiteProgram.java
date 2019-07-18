@@ -36,7 +36,7 @@ public abstract class SQLiteProgram extends SQLiteClosable implements SupportSQL
     private final String mSql;
     private final boolean mReadOnly;
     private final String[] mColumnNames;
-    private final int mNumParameters;
+    private int mNumParameters;
     private final Object[] mBindArgs;
 
     SQLiteProgram(SQLiteDatabase db, String sql, Object[] bindArgs,
@@ -136,6 +136,11 @@ public abstract class SQLiteProgram extends SQLiteClosable implements SupportSQL
         bind(index, value);
     }
 
+    public void bindBool(int index, boolean value) {
+        bind(index, value);
+    }
+
+
     /**
      * Bind a double value to this statement. The value remains bound until
      * {@link #clearBindings} is called.
@@ -224,8 +229,8 @@ public abstract class SQLiteProgram extends SQLiteClosable implements SupportSQL
      */
     public void bindAllArgsAsStrings(String[] bindArgs) {
         if (bindArgs != null) {
-            for (int i = bindArgs.length; i != 0; i--) {
-                bindString(i, bindArgs[i - 1]);
+            for (int i = bindArgs.length - 1; i >= 0; i--) {
+                bindString(i, bindArgs[i]);
             }
         }
     }
@@ -236,11 +241,19 @@ public abstract class SQLiteProgram extends SQLiteClosable implements SupportSQL
     }
 
     private void bind(int index, Object value) {
-        if (index < 1 || index > mNumParameters) {
+        if (index < 0 || index >= mNumParameters) {
             throw new IllegalArgumentException("Cannot bind argument at index "
                     + index + " because the index is out of range.  "
                     + "The statement has " + mNumParameters + " parameters.");
         }
-        mBindArgs[index - 1] = value;
+        mBindArgs[index] = value;
+    }
+
+    public int getNumParameters() {
+        return mNumParameters;
+    }
+
+    public void setNumParameters(int numParameters) {
+        mNumParameters = numParameters;
     }
 }
