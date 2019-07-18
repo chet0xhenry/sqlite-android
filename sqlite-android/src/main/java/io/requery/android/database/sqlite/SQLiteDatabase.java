@@ -1398,6 +1398,14 @@ public final class SQLiteDatabase extends SQLiteClosable implements SupportSQLit
         return rawQueryWithFactory(null, sql, selectionArgs, null, null);
     }
 
+    public Cursor rawQuery(String sql, long[] selectionArgs) {
+        return rawQueryWithFactory(null, sql, selectionArgs, null, null);
+    }
+
+    public Cursor rawQuery(String sql) {
+        return rawQueryWithFactory(null, sql);
+    }
+
     /**
      * Runs the provided SQL and returns a {@link Cursor} over the result set.
      *
