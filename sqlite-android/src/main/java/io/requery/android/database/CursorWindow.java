@@ -391,6 +391,11 @@ public class CursorWindow extends SQLiteClosable {
         return (int) getLong(row, column);
     }
 
+    public boolean getBool(int row, int column) {
+        return (getLong(row, column) == 0 ? false : true);
+    }
+
+
     /**
      * Gets the value of the field at the specified row and column index as a
      * <code>float</code>.
