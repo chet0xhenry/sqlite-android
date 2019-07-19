@@ -257,10 +257,6 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
         }
     }
 
-    public void loadExtension(SqliteCustomExtension extension) {
-        nativeLoadExtension(mConnectionPtr, extension.path, extension.entryPoint);
-    }
-
     private void dispose(boolean finalized) {
         if (mCloseGuard != null) {
             if (finalized) {
