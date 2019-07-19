@@ -54,7 +54,7 @@ public abstract class SQLiteOpenHelper implements SupportSQLiteOpenHelper {
     private static final boolean DEBUG_STRICT_READONLY = false;
 
     private final Context mContext;
-    private final String mName;
+    protected String mName;
     private final SQLiteDatabase.CursorFactory mFactory;
     private final int mNewVersion;
 
@@ -111,6 +111,13 @@ public abstract class SQLiteOpenHelper implements SupportSQLiteOpenHelper {
         mFactory = factory;
         mNewVersion = version;
         mErrorHandler = errorHandler;
+    }
+
+    public SQLiteOpenHelper(Context context) {
+        mContext = context;
+        mFactory = null;
+        mNewVersion = 0;
+        mErrorHandler = null;
     }
 
     /**
