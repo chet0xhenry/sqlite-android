@@ -74,6 +74,12 @@ public abstract class AbstractWindowedCursor extends AbstractCursor {
         return mWindow.getInt(mPos, columnIndex);
     }
 
+
+    public boolean getBool(int columnIndex) {
+        checkPosition();
+        return mWindow.getBool(mPos, columnIndex);
+    }
+
     @Override
     public long getLong(int columnIndex) {
         checkPosition();
