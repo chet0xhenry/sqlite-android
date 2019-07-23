@@ -47,13 +47,11 @@ public abstract class AbstractWindowedCursor extends AbstractCursor {
 
     @Override
     public byte[] getBlob(int columnIndex) {
-        checkPosition();
         return mWindow.getBlob(mPos, columnIndex);
     }
 
     @Override
     public String getString(int columnIndex) {
-        checkPosition();
         return mWindow.getString(mPos, columnIndex);
     }
 
@@ -64,37 +62,31 @@ public abstract class AbstractWindowedCursor extends AbstractCursor {
 
     @Override
     public short getShort(int columnIndex) {
-        checkPosition();
         return mWindow.getShort(mPos, columnIndex);
     }
 
     @Override
     public int getInt(int columnIndex) {
-        checkPosition();
         return mWindow.getInt(mPos, columnIndex);
     }
 
 
     public boolean getBool(int columnIndex) {
-        checkPosition();
         return mWindow.getBool(mPos, columnIndex);
     }
 
     @Override
     public long getLong(int columnIndex) {
-        checkPosition();
         return mWindow.getLong(mPos, columnIndex);
     }
 
     @Override
     public float getFloat(int columnIndex) {
-        checkPosition();
         return mWindow.getFloat(mPos, columnIndex);
     }
 
     @Override
     public double getDouble(int columnIndex) {
-        checkPosition();
         return mWindow.getDouble(mPos, columnIndex);
     }
 
